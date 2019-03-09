@@ -2,13 +2,9 @@ require('dotenv').config()
 var express = require('express');
 var bodyParser = require('body-parser');
 var jwt = require('jsonwebtoken');
-var validator  = require('validator')
-var User = require('UserModel');
+var User = require('./UserModel');
 var JWT_SECRET = process.env.JWT_SECRET;
 
-
-
-var path = require('path');
 
 var app = express();
 //Using body-parser middleware
@@ -25,18 +21,19 @@ app.use(bodyParser.json());
 app.post('/user/createUser', function(req, res){
             var email = req.body.email;
             var password = req.body.password;
-
-            User.addUser(emai, password, function(addSuccess, errMsg){
+            console.log(email,password);
+            User.addUser(email, password, function(addSuccess, errMsg){
                 if (!addSuccess)
-                return res.status(400).send({message: errMsg });
+                    return res.status(400).send({message: errMsg });
+                else {
+                    var token = jwt.sign(
+                        {id: email}, 
+                        JWT_SECRET, {
+                        expiresIn: '24h',
+                        });
+                    return res.status(200).send({token});
+                }
             });
-            
-            var token = jwt.sign(
-                email, 
-                JWT_SECRET, {
-                expiresIn: '24h',
-                });
-            return res.status(200).send({token});
             
 });
 
@@ -51,7 +48,7 @@ app.post('/user/login', function(req, res){
 
 
 //TODO
-app.post('/user/addSecret', function(req, res){
+app.put('/user/addSecret', function(req, res){
     return res.status(500).send("Not Implemented");
 });
 
@@ -61,6 +58,6 @@ app.get('/user/guessSecret', function(req, res){
 });
 
 
-var server = app.listen(PORT, function () {
+var server = app.listen(3000, function () {
     console.log("app running on port.", server.address().port);
 });

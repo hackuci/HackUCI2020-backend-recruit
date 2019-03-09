@@ -4,8 +4,7 @@ var UserModel = {};
 
 var users = {};
 
-// Adds a user with email and password, and calls the callback with False
-// if user is 
+// Adds a user with email and password, and passes success/failure to callback
 UserModel.addUser = function(email, password, callback){
     if(!email || !validator.isEmail(email)){
         callback(false, "Email is ill-formed");
