@@ -42,11 +42,6 @@ app.post('/user/login', function(req, res){
     return res.status(500).send("Not Implemented");
 });
 
-
-//Tip: Instead of repeating the same token validation code in each of the routes,
-//use Express middleware to validate the token before passing the request to the endpoints
-
-
 //TODO
 app.put('/user/addSecret', function(req, res){
     return res.status(500).send("Not Implemented");
